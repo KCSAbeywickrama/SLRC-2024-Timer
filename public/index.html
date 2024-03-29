@@ -112,9 +112,9 @@
         // }
 
         function setZero(num, l) {
-            let max=60;
-            if(l==100) max=60;
-            num = num % max;
+            let max = 60;
+            if (l == 100) max = 60;
+            // num = num % max;
             if (num < 10) {
                 return ('0' + num);
             }
@@ -124,47 +124,56 @@
 
         }
 
-
-
         const toggleButton = () => {
             lapButton.classList.remove("hidden");
             resetButton.classList.remove("hidden");
+        }
+
+        const on_min = () => {
+            minCounter++;
+            if (minCounter === 60) {
+                minCounter = 0;
+            }
+            minute.innerHTML = `${setZero(minCounter, 10)} :&nbsp; `;
+        }
+
+        const on_sec = () => {
+            secCounter++;
+            if (secCounter === 60) {
+                secCounter = 0;
+                on_min();
+            }
+            if (minCounter >= MINUTE_THRESHOLD && secCounter >= SECOND_THRESHOLD) {
+                firstbg.classList.remove("animation-firstbg");
+                firstbg.classList.add("animation-secondbg");
+            }
+            second.innerHTML = `&nbsp;${setZero(secCounter, 10)} :`;
+        }
+
+        const on_centisec = () => {
+            centiCounter++;
+            if (centiCounter === 100) {
+                centiCounter = 0;
+                on_sec();
+            }
+            centiSecond.innerHTML = `&nbsp;${setZero(centiCounter, 100)}`;
         }
 
         const play = () => {
             if (!isPlay && !isReset) {
                 playButton.innerHTML = "Pause";
                 firstbg.classList.add("animation-firstbg");
-                min = setInterval(() => {
-                    if (minCounter === 60) {
-                        minCounter = 0;
-                    }
-                    minute.innerHTML = `${setZero(++minCounter, 10)} :&nbsp; `;
-                }, 60 * 1000);
-                sec = setInterval(() => {
-                    if (secCounter === 60) {
-                        secCounter = 0;
-                    }
-                    if (minCounter >= MINUTE_THRESHOLD && secCounter >= SECOND_THRESHOLD) {
-                        firstbg.classList.remove("animation-firstbg");
-                        firstbg.classList.add("animation-secondbg");
-                    }
-                    second.innerHTML = `&nbsp;${setZero(++secCounter, 10)} :`;
-                }, 1000);
-                centiSec = setInterval(() => {
-                    if (centiCounter === 100) {
-                        centiCounter = 0;
-                    }
-                    centiSecond.innerHTML = `&nbsp;${setZero(++centiCounter, 100)}`;
-                }, 10);
+                // min = setInterval(on_min, 60 * 1000);
+                // sec = setInterval(on_sec, 1000);
+                centiSec = setInterval(on_centisec, 10);
 
                 isPlay = true;
                 isReset = true;
             }
             else {
                 playButton.innerHTML = "Play";
-                clearInterval(min);
-                clearInterval(sec);
+                // clearInterval(min);
+                // clearInterval(sec);
                 clearInterval(centiSec);
                 isPlay = false;
                 isReset = false;
@@ -173,6 +182,8 @@
             }
             toggleButton();
         }
+
+
 
         const reset = () => {
             isReset = true;
