@@ -92,15 +92,15 @@ img {
 }
 
 .min {
-  font-size: 150px;
+  font-size: 180px;
 }
 
 .sec {
-  font-size: 150px;
+  font-size: 180px;
 }
 
 .msec {
-  font-size: 100px;
+  font-size: 120px;
 }
 
 .button-wrapper {
@@ -203,8 +203,8 @@ img {
 
 #container {
   position: fixed;
-  bottom: 100px;
-  right: 100px;  
+  bottom: 80px;
+  right: 100px;
   margin: 10px;
 }
 
