@@ -86,12 +86,12 @@
 
         let isPlay = false;
         let secCounter = 0;
+        let timer;
         let sec;
         let centiSec;
         let centiCounter = 0;
         let minCounter = 0;
         let min;
-        let isReset = false;
         let lapItem = 0;
         let preCenti = 0;
         let preSec = 0;
@@ -99,24 +99,14 @@
         let currentCenti = 0;
         let currentSec = 0;
         let currentMin = 0;
-
-        // function setZero(num, l){
-        //     if(l==100 && num<10){
-        //         return ('00'+num);
-        //     }
-        //     if(num<l){
-        //         return ('0'+num);
-        //     }
-        //     else{
-        //         return num;
-        //     }
-
-        // }
-
+        let currentMillis = 0;
+        let startMillis = 0;
+        let elapsedMillis = 0;
+    
         function setZero(num, l) {
             let max = 60;
             if (l == 100) max = 60;
-            // num = num % max;
+           
             if (num < 10) {
                 return ('0' + num);
             }
@@ -126,93 +116,77 @@
 
         }
 
-        const toggleButton = () => {
-            // lapButton.classList.remove("hidden");
-            // resetButton.classList.remove("hidden");
-        }
-
-        const on_min = () => {
-            minCounter++;
-            if (minCounter === 60) {
-                minCounter = 0;
-            }
+        const update_background = () => {
 
             if (minCounter == 9) {
                 document.body.style.backgroundColor = 'red';
                 background.style.backgroundColor = 'red';
             } else if (minCounter == 10) {
                 playButton.innerHTML = "Play";
-                clearInterval(sec);
-                clearInterval(centiSec);
+                clearInterval(timer)
                 centiCounter = 0;
-                centiSecond.innerHTML = `&nbsp;${setZero(centiCounter, 100)}`;
+                secCounter=0;
+                
                 isPlay = false;
-                isReset = false;
+                
                 firstbg.classList.remove("animation-firstbg");
-                firstbg.classList.remove("animation-secondbg");
+                // firstbg.classList.remove("animation-secondbg");
             }
+
+        }
+
+        const on_timer_tick = () => {
+            currentMillis = elapsedMillis + Date.now() - startMillis;
+            centiCounter = parseInt(currentMillis / 10) % 100;
+            secCounter = parseInt(currentMillis / 1000) % 60;
+            minCounter = parseInt(currentMillis / 1000 / 60);
+
+            update_background();
 
             minute.innerHTML = `${setZero(minCounter, 10)} :`;
-        }
-
-        const on_sec = () => {
-            secCounter++;
-            if (secCounter === 60) {
-                secCounter = 0;
-                on_min();
-            }
-            if (minCounter >= MINUTE_THRESHOLD && secCounter >= SECOND_THRESHOLD) {
-                firstbg.classList.remove("animation-firstbg");
-                firstbg.classList.add("animation-secondbg");
-            }
             second.innerHTML = `&nbsp;${setZero(secCounter, 10)} :`;
-        }
-
-        const on_centisec = () => {
-            centiCounter++;
-            if (centiCounter === 100) {
-                centiCounter = 0;
-                // on_sec();
-            }
             centiSecond.innerHTML = `&nbsp;${setZero(centiCounter, 100)}`;
+
         }
 
         const play = () => {
-            if (!isPlay && !isReset) {
+            if (!isPlay) { //play
                 playButton.innerHTML = "Pause";
                 firstbg.classList.add("animation-firstbg");
-                // min = setInterval(on_min, 60 * 1000);
-                sec = setInterval(on_sec, 1000);
-                centiSec = setInterval(on_centisec, 10);
+                startMillis = Date.now();
+                timer = setInterval(on_timer_tick, 10);
 
                 isPlay = true;
-                isReset = true;
+
             }
-            else {
+            else { //pause
                 playButton.innerHTML = "Play";
-                // clearInterval(min);
-                clearInterval(sec);
-                clearInterval(centiSec);
+                clearInterval(timer);
+                elapsedMillis += Date.now() - startMillis;
                 isPlay = false;
-                isReset = false;
+
                 firstbg.classList.remove("animation-firstbg");
-                firstbg.classList.remove("animation-secondbg");
+                // firstbg.classList.remove("animation-secondbg");
             }
-            toggleButton();
+            
         }
 
 
 
         const reset = () => {
-            isReset = true;
+            clearInterval(timer);
+
             secCounter = 0;
             minCounter = 0;
             centiSecCounter = 0;
-            play();
+            elapsedMillis = 0;
             lapItem = 0;
-            clearAll();
-            // lapButton.classList.add("hidden");
-            // resetButton.classList.add("hidden");
+
+            isPlay = false;
+
+            firstbg.classList.remove("animation-firstbg");
+            // firstbg.classList.remove("animation-secondbg");
+
             second.innerHTML = "&nbsp;00 :";
             centiSecond.innerHTML = "&nbsp;00";
             minute.innerHTML = "00 :";
