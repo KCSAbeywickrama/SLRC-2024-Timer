@@ -55,9 +55,9 @@
                 </div>
             </div>
             <div class="button-wrapper">
-                <button class="button reset hidden">Reset</button>
+                <button class="button reset">Reset</button>
                 <button class="button play">Play</button>
-                <button class="button lap hidden">Laps</button>
+                <!-- <button class="button lap hidden">Laps</button> -->
             </div>
         </div>
         <ul class="laps">
@@ -68,13 +68,15 @@
     <script>
         const playButton = document.getElementsByClassName("play")[0];
         const resetButton = document.getElementsByClassName("reset")[0];
-        const lapButton = document.getElementsByClassName("lap")[0];
+        // const lapButton = document.getElementsByClassName("lap")[0];
         const clearButton = document.getElementsByClassName("lap-clear-button")[0];
         const minute = document.getElementsByClassName("min")[0];
         const second = document.getElementsByClassName("sec")[0];
         const centiSecond = document.getElementsByClassName("msec")[0];
         const laps = document.getElementsByClassName("laps")[0];
         const firstbg = document.getElementsByClassName("outer-circle")[0];
+        const background = document.getElementsByClassName("container")[0];
+
 
         /*****CHANGE THRESHOLD VALUES HERE******/
 
@@ -125,8 +127,8 @@
         }
 
         const toggleButton = () => {
-            lapButton.classList.remove("hidden");
-            resetButton.classList.remove("hidden");
+            // lapButton.classList.remove("hidden");
+            // resetButton.classList.remove("hidden");
         }
 
         const on_min = () => {
@@ -134,6 +136,19 @@
             if (minCounter === 60) {
                 minCounter = 0;
             }
+
+            if (minCounter==9){
+                background.style.backgroundColor = 'red';
+            } else if(minCounter==10){
+                playButton.innerHTML = "Play";                
+                clearInterval(sec);
+                clearInterval(centiSec);
+                isPlay = false;
+                isReset = false;
+                firstbg.classList.remove("animation-firstbg");
+                firstbg.classList.remove("animation-secondbg");                
+            }
+
             minute.innerHTML = `${setZero(minCounter, 10)} :`;
         }
 
@@ -193,14 +208,12 @@
             play();
             lapItem = 0;
             clearAll();
-            lapButton.classList.add("hidden");
-            resetButton.classList.add("hidden");
+            // lapButton.classList.add("hidden");
+            // resetButton.classList.add("hidden");
             second.innerHTML = "&nbsp;00 :";
             centiSecond.innerHTML = "&nbsp;00";
             minute.innerHTML = "00 :";
-
-
-
+            background.style.backgroundColor = 'black';
         }
 
         const lap = () => {
