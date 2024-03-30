@@ -102,11 +102,12 @@
         let currentMillis = 0;
         let startMillis = 0;
         let elapsedMillis = 0;
-    
+        let isTimeOut = false;
+
         function setZero(num, l) {
             let max = 60;
             if (l == 100) max = 60;
-           
+
             if (num < 10) {
                 return ('0' + num);
             }
@@ -125,10 +126,11 @@
                 playButton.innerHTML = "Play";
                 clearInterval(timer)
                 centiCounter = 0;
-                secCounter=0;
-                
+                secCounter = 0;
+
                 isPlay = false;
-                
+                isTimeOut=true;
+
                 firstbg.classList.remove("animation-firstbg");
                 // firstbg.classList.remove("animation-secondbg");
             }
@@ -149,7 +151,34 @@
 
         }
 
+        const reset = () => {
+            clearInterval(timer);
+
+            secCounter = 0;
+            minCounter = 0;
+            centiSecCounter = 0;
+            elapsedMillis = 0;
+            lapItem = 0;
+
+            isPlay = false;
+            isTimeOut = false;
+            
+            playButton.innerHTML = "Play";
+
+            firstbg.classList.remove("animation-firstbg");
+            // firstbg.classList.remove("animation-secondbg");
+
+            second.innerHTML = "&nbsp;00 :";
+            centiSecond.innerHTML = "&nbsp;00";
+            minute.innerHTML = "00 :";
+            document.body.style.backgroundColor = 'black';
+            background.style.backgroundColor = 'black';
+
+        }
+
         const play = () => {
+            if (isTimeOut) reset();
+
             if (!isPlay) { //play
                 playButton.innerHTML = "Pause";
                 firstbg.classList.add("animation-firstbg");
@@ -168,32 +197,12 @@
                 firstbg.classList.remove("animation-firstbg");
                 // firstbg.classList.remove("animation-secondbg");
             }
-            
-        }
-
-
-
-        const reset = () => {
-            clearInterval(timer);
-
-            secCounter = 0;
-            minCounter = 0;
-            centiSecCounter = 0;
-            elapsedMillis = 0;
-            lapItem = 0;
-
-            isPlay = false;
-
-            firstbg.classList.remove("animation-firstbg");
-            // firstbg.classList.remove("animation-secondbg");
-
-            second.innerHTML = "&nbsp;00 :";
-            centiSecond.innerHTML = "&nbsp;00";
-            minute.innerHTML = "00 :";
-            document.body.style.backgroundColor = 'black';
-            background.style.backgroundColor = 'black';
 
         }
+
+
+
+
 
         const lap = () => {
             const li = document.createElement("li");
