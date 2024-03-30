@@ -75,7 +75,7 @@
         const centiSecond = document.getElementsByClassName("msec")[0];
         const laps = document.getElementsByClassName("laps")[0];
         const firstbg = document.getElementsByClassName("outer-circle")[0];
-        const background = document.getElementsByClassName("container")[0];
+        const background = document.getElementsByClassName("inner-circle")[0];
 
 
         /*****CHANGE THRESHOLD VALUES HERE******/
@@ -137,16 +137,19 @@
                 minCounter = 0;
             }
 
-            if (minCounter==9){
+            if (minCounter == 9) {
+                document.body.style.backgroundColor = 'red';
                 background.style.backgroundColor = 'red';
-            } else if(minCounter==10){
-                playButton.innerHTML = "Play";                
+            } else if (minCounter == 10) {
+                playButton.innerHTML = "Play";
                 clearInterval(sec);
                 clearInterval(centiSec);
+                centiCounter = 0;
+                centiSecond.innerHTML = `&nbsp;${setZero(centiCounter, 100)}`;
                 isPlay = false;
                 isReset = false;
                 firstbg.classList.remove("animation-firstbg");
-                firstbg.classList.remove("animation-secondbg");                
+                firstbg.classList.remove("animation-secondbg");
             }
 
             minute.innerHTML = `${setZero(minCounter, 10)} :`;
@@ -179,8 +182,8 @@
                 playButton.innerHTML = "Pause";
                 firstbg.classList.add("animation-firstbg");
                 // min = setInterval(on_min, 60 * 1000);
-                sec = setInterval(on_sec, 1000);
-                centiSec = setInterval(on_centisec, 10);
+                sec = setInterval(on_sec, 1000 / 10);
+                centiSec = setInterval(on_centisec, 10 / 10);
 
                 isPlay = true;
                 isReset = true;
@@ -213,7 +216,9 @@
             second.innerHTML = "&nbsp;00 :";
             centiSecond.innerHTML = "&nbsp;00";
             minute.innerHTML = "00 :";
+            document.body.style.backgroundColor = 'black';
             background.style.backgroundColor = 'black';
+
         }
 
         const lap = () => {
